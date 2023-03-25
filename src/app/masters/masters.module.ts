@@ -6,16 +6,16 @@ import { LandingComponent } from './landing.component';
 import { BusinessplansComponent } from './businessplans/businessplans.component';
 import { SharedModule } from '../shared/shared.module';
 
-
 @NgModule({
   declarations: [
     LandingComponent,
-    BusinessplansComponent
+    BusinessplansComponent,
+
   ],
   imports: [
     CommonModule,
     MastersRoutingModule,
-    SharedModule
+    SharedModule,
   ]
 })
 export class MastersModule { }

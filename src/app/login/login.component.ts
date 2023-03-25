@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
 import { ApiService } from '../shared/api.service';
 
 @Component({
@@ -42,7 +43,23 @@ export class LoginComponent implements OnInit {
       }
       if (result.status == "success") {
         localStorage.setItem("user", JSON.stringify(result.data));
-        this.router.navigate(['/general'])
+        this.router.navigate(['/general']);
+
+        const Toast = Swal.mixin({
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 2000,
+          timerProgressBar: true,
+          // didOpen: (toast) => {
+          //   toast.addEventListener('mouseenter', Swal.stopTimer)
+          //   toast.addEventListener('mouseleave', Swal.resumeTimer)
+          // }
+        })
+        Toast.fire({
+          icon: 'success',
+          title: 'Signed in successfully'
+        })
       }
     })
 
