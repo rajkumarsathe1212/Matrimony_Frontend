@@ -1,9 +1,12 @@
 <div class="card">
   <div class="card-body">
-    <h5 class="mt-3 mb-4">Business Plan Details</h5>
+    <div class="row">
 
+      <h5 class="mt-3 mb-4 col-lg-6">Business Plan Details</h5>
+      <div class="col-lg-6 text-end mt-3"><button class="btn btn-primary" routerLink="/masters/businesses">Go Back</button></div>
+    </div>
     <form class="row g-3" [formGroup]="formdata" (ngSubmit)="submit(formdata.value)">
-      <div class="col-md-6">
+      <div class="col-md-3">
         <div class="form-floating form-group">
           <input type="text" class="form-control" formControlName="planname" placeholder="Plan name">
           <label for="floatingName">Enter Plan name<span style="color: red;">*</span></label>
@@ -11,7 +14,18 @@
         </div>
       </div>
 
-      <div class="col-md-6">
+      <!-- <div class="col-md-3">
+        <div class="form-floating mb-3">
+          <select class="form-select" id="floatingSelect" aria-label="State" formControlName="planname">
+            <option value="">--select--</option>
+            <option *ngFor="let data of datas">{{data.planname}}</option>
+          </select>
+          <label for="floatingName">Enter Plan name<span style="color: red;">*</span></label>
+          <em class="error text-danger small" *ngIf="formdata.controls.planname.touched && formdata.controls.planname.invalid">Please enter your plan details</em>
+        </div>
+      </div> -->
+
+      <div class="col-md-3">
         <div class="form-floating form-group">
           <input type="text" class="form-control" formControlName="amount" placeholder="Amount">
           <label for="floatingName">Amount<span style="color: red;">*</span></label>
@@ -19,7 +33,7 @@
         </div>
       </div>
 
-      <div class="col-md-6">
+      <div class="col-md-3">
         <div class="form-floating form-group">
           <input type="text" class="form-control" formControlName="duration" placeholder="Duration">
           <label for="floatingName">Duration<span style="color: red;">*</span></label>
@@ -27,13 +41,30 @@
         </div>
       </div>
 
-      <div class="col-md-6">
+      <div class="col-md-3">
         <div class="form-floating form-group">
           <input type="text" class="form-control" formControlName="profileviews" placeholder="Profileviews">
           <label for="floatingName">Profileviews<span style="color: red;">*</span></label>
           <em class="error text-danger small" *ngIf="formdata.controls.profileviews.touched && formdata.controls.profileviews.invalid">Please enter profile views </em>
         </div>
       </div>
+
+      <div class="col-md-3">
+        <div class="form-floating form-group">
+          <input type="hidden" class="form-control" formControlName="businessid">
+        </div>
+      </div>
+
+      <!-- <div class="col-md-3">
+        <div class="form-floating mb-3">
+          <select class="form-select" id="floatingSelect" aria-label="State"
+            (change)="businessChanged($event)" formControlName="businessid">
+            <option *ngFor="let data of businesses" value="{{data._id}}">{{data.name}}</option>
+          </select>
+          <label for="floatingSelect">Business <span class="text-danger">*</span></label>
+          <em class="error text-danger small" *ngIf="formdata.controls.businessid.touched && formdata.controls.businessid.invalid">Please Enter Business</em>
+        </div>
+        </div> -->
 
       <div class="text-center">
         <button type="submit" class="btn btn-primary" [disabled]="formdata.invalid">Submit</button>
@@ -56,13 +87,14 @@
                   <th>Actions</th>
                   <th>Sr no</th>
                   <th>Plan Name</th>
+                  <th>Name</th>
                   <th>Amount</th>
                   <th>Duration</th>
                   <th>Profileviews</th>
               </tr>
             </thead>
 
-            <tbody>
+            <tbody *ngIf="datas">
               <tr *ngFor="let data of datas,let i = index">
                 <td>
                   <button (click)="edit(data._id)" class="btn btn-primary"><i class="bi bi-pencil-square"></i></button>
@@ -70,6 +102,7 @@
                 </td>
                 <td>{{i+1}}</td>
                 <td>{{data.planname}}</td>
+                <td>{{data.businessid.name}}</td>
                 <td>{{data.amount}}</td>
                 <td>{{data.duration}}</td>
                 <td>{{data.profileviews}}</td>

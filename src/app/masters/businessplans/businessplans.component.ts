@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { ApiService } from 'src/app/shared/api.service';
 import Swal from 'sweetalert2';
 
@@ -15,8 +16,14 @@ export class BusinessplansComponent implements OnInit{
   formdata:any;
   datas:any = "";
   id = "";
+  businesses:any;
+  businessid :any
 
-  constructor(private api:ApiService){}
+  constructor(private api:ApiService, private route :ActivatedRoute){
+    this.businessid = this.route.snapshot.paramMap.get('businessid');
+    // console.log(this.businessid);
+
+  }
 
   ngOnInit(): void {
     this.load();
@@ -25,12 +32,23 @@ export class BusinessplansComponent implements OnInit{
   load(){
     this.id = "";
 
-    this.api.get("businessplans").subscribe((result:any)=>{
+    this.api.get("businesses").subscribe((result:any)=>{
+      // console.log(result.data);
+      if(result.status == "success")
+      this.businesses = result.data;
+
+
+    })
+
+    this.api.get("businessplans/" + this.businessid).subscribe((result:any)=>{
+      // console.log(result.data);
+      if(result.status == "success")
       this.datas = result.data;
     })
 
     this.formdata = new FormGroup({
       planname : new FormControl("",Validators.compose([Validators.required])),
+      businessid : new FormControl(this.businessid),
       amount:new FormControl("",Validators.compose([Validators.required])),
       duration:new FormControl(""),
       profileviews:new FormControl("",Validators.compose([Validators.required]))
@@ -43,14 +61,26 @@ export class BusinessplansComponent implements OnInit{
     this.load();
   }
 
+  businessChanged(event:any){
+    let ctrl = <HTMLSelectElement>(event.target)
+    console.log(ctrl.value);
+
+    this.formdata.patchValue({
+      businessid : ctrl.value
+    })
+  }
+
   edit(id:any){
     this.id = id;
-    this.api.get("businessplans/" + id).subscribe((result:any)=>{
+    this.api.get("businessplans/" +this.businessid+ "/" + id).subscribe((result:any)=>{
+      console.log(result);
+
       this.formdata.patchValue({
+        businessid:result.data.businessid,
         planname : result.data.planname,
-        amount: result.data.planname,
-        duration:result.data.planname,
-        profileviews:result.data.planname
+        amount: result.data.amount,
+        duration:result.data.duration,
+        profileviews:result.data.profileviews
       })
     })
   }
